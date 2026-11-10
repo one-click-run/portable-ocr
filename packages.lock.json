@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net10.0": {
+      "Microsoft.DotNet.ILCompiler": {
+        "type": "Direct",
+        "requested": "[10.0.15, )",
+        "resolved": "10.0.15",
+        "contentHash": "MjeBT/P5YgUuXfwSbI3ms+F5DkQ2+ilynoHE2jA/Kto//MaE/wtP5EveCAL8abpxFGw9tlHNTAV1j60Wh1oLqg=="
+      },
+      "Microsoft.NET.ILLink.Tasks": {
+        "type": "Direct",
+        "requested": "[10.0.15, )",
+        "resolved": "10.0.15",
+        "contentHash": "u0WnRcZgBZYHlVFpbe/3Adpmb9rmNJ8/fmEwqc/xjB7fFppq+gfaLJd3Sdaw+J02zV0eP/T9dneQ3Dv5jWw6bw=="
+      },
+      "Sdcb.SimdCodecs.Png": {
+        "type": "Direct",
+        "requested": "[2.0.0, )",
+        "resolved": "2.0.0",
+        "contentHash": "h+9X9eyDpLvVratOA9FLCeJiJOfJO1MWsuolwHtj1ItIKe8irqPDO+2LnnYaks6y5Km1D/KuXi2zOnOqbaOf/A==",
+        "dependencies": {
+          "Sdcb.SimdCodecs.Abstractions": "2.0.0",
+          "Sdcb.SimdCodecs.Color.Icc": "2.0.0"
+        }
+      },
+      "Sdcb.SimdPaddleOCR": {
+        "type": "Direct",
+        "requested": "[2.0.0, )",
+        "resolved": "2.0.0",
+        "contentHash": "ewb0TEBisxHWF0Khkgllair9wZ+Nij25mXvtLtg0wPLCZI0/PKLNJxwuuqzX7Men98rr5d3qeLZ9m5sDdLpRwA==",
+        "dependencies": {
+          "Sdcb.SimdPaddleOCR.ModelProvider": "1.0.0"
+        }
+      },
+      "Sdcb.SimdPaddleOCR.Models.ChineseV6Medium": {
+        "type": "Direct",
+        "requested": "[1.0.0, )",
+        "resolved": "1.0.0",
+        "contentHash": "g1zNbtQeoikQkGqdqpAvsUlc64o37pnTQYZBmoy4GS55qqkY04d7NW9KK/FmpAGd0p9t580T+b0vKB6Z4jsWMQ==",
+        "dependencies": {
+          "Sdcb.SimdPaddleOCR.ModelProvider": "1.0.0",
+          "Sdcb.SimdPaddleOCR.Models.TextLineOrientation": "1.0.0"
+        }
+      },
+      "Sdcb.SimdCodecs.Abstractions": {
+        "type": "Transitive",
+        "resolved": "2.0.0",
+        "contentHash": "So5Cs1FCOSgKUW8mO5tb5IgO3CUtCb3XJ0tEfmoS3I+2eWVWeUf+85ZZdedbWDtlH+F4CrH54Vi8SoWqyZ2B2A=="
+      },
+      "Sdcb.SimdCodecs.Color.Icc": {
+        "type": "Transitive",
+        "resolved": "2.0.0",
+        "contentHash": "zLXl/odNdulNfkJJa1qZALe4AFN3PXIaHBsd3eiTe7zuQ487edC/hEoQwsLA1ARuu28a81vSl6To6nOLsMHSgA==",
+        "dependencies": {
+          "Sdcb.SimdCodecs.Abstractions": "2.0.0"
+        }
+      },
+      "Sdcb.SimdPaddleOCR.ModelProvider": {
+        "type": "Transitive",
+        "resolved": "1.0.0",
+        "contentHash": "pVd52DFQ0J7Z6ThtCxrj3r0usMSmEUicKsTLsfhd658/eY8LhjFm9byagle9DlZeAghHI5KSaJZbS1p4To4+Zg=="
+      },
+      "Sdcb.SimdPaddleOCR.Models.TextLineOrientation": {
+        "type": "Transitive",
+        "resolved": "1.0.0",
+        "contentHash": "BYdvoOKPj4dmNrIdut8UZB76HyWWBIVYJoNmOoqmDA0dnUnw6niReXRox1WmXcxTZ/6jyijmOTJXmap1iWUTiw==",
+        "dependencies": {
+          "Sdcb.SimdPaddleOCR.ModelProvider": "1.0.0"
+        }
+      }
+    },
+    "net10.0/win-x64": {
+      "Microsoft.DotNet.ILCompiler": {
+        "type": "Direct",
+        "requested": "[10.0.15, )",
+        "resolved": "10.0.15",
+        "contentHash": "MjeBT/P5YgUuXfwSbI3ms+F5DkQ2+ilynoHE2jA/Kto//MaE/wtP5EveCAL8abpxFGw9tlHNTAV1j60Wh1oLqg==",
+        "dependencies": {
+          "runtime.win-x64.Microsoft.DotNet.ILCompiler": "10.0.15"
+        }
+      },
+      "runtime.win-x64.Microsoft.DotNet.ILCompiler": {
+        "type": "Transitive",
+        "resolved": "10.0.15",
+        "contentHash": "WEtOJ41ItA7fJ+pqQFYgCmZxiX5d6AByfLWbifqEjyjkfFXmD9/T9V7xTwrvh5OxkJkBhnZsygcdU0Al9MNcVw=="
+      }
+    }
+  }
+}
