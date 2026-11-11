@@ -77,9 +77,11 @@ pwsh -File ./scripts/package.ps1 -Runtime win-x64
 
 ## GitHub Actions
 
-推送到 `main`、创建 Pull Request 或手动运行 `Build portable-ocr`，都会在五个平台分别编译、执行 `--help` 并打包。进入 [Actions](https://github.com/one-click-run/portable-ocr/actions) 的对应运行，在 Artifacts 中下载构建产物；解开 Actions 的外层 ZIP 后，再解压平台压缩包。
+在 GitHub 的 [Releases](https://github.com/one-click-run/portable-ocr/releases) 页面创建新版本，选择当前代码的标签（例如 `v0.2.0`，新标签的目标选择 `main`），填写版本说明并点击 Publish release。正式版和预发布版都会触发五个平台的编译打包；仅保存草稿、推送代码或推送标签不会触发。
 
-推送 `v*` 标签时，全部平台打包成功后会自动创建 Release 草稿并附上五个平台压缩包和校验文件。检查后在 GitHub 发布草稿，即可从 Releases 下载。工作流使用内置 `GITHUB_TOKEN`，无需额外配置发布 Secret。仓库或组织需允许 Actions，并允许该工作流创建 Release；私有仓库的构建和产物存储按 GitHub 账户额度计费。
+工作流构建 Release 标签对应的代码，全部平台打包成功后，自动将五个平台压缩包和 SHA-256 校验文件上传到该 Release 的 Assets。打包期间 Release 已经可见，下载附件需等工作流完成。失败后可以在 Actions 中重新运行，上传步骤会替换同名附件。工作流使用内置 `GITHUB_TOKEN`，无需额外配置发布 Secret；仓库或组织需允许 Actions，并允许该工作流写入 Release。
+
+也可在 [Actions](https://github.com/one-click-run/portable-ocr/actions) 中手动运行 `Build portable-ocr` 验证构建，产物仅保存在该次运行的 Artifacts 中，不上传到 Release。解开 Actions 的外层 ZIP 后，再解压平台压缩包。
 
 macOS 包当前只带 Native AOT 的本地签名，没有 Developer ID 签名、公证或相关 Secret；完整的 Apple 分发签名需另行配置证书。
 
