@@ -1,16 +1,59 @@
 name: Build portable-ocr
 
 on:
-  release:
-    types: [published]
-  workflow_dispatch:
+  push:
+    branches: [main]
 
 permissions:
   contents: read
 
+concurrency:
+  group: portable-ocr-release
+  cancel-in-progress: false
+
 jobs:
+  version:
+    name: Check project version
+    runs-on: ubuntu-22.04
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      build: ${{ steps.version.outputs.build }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Build only unpublished versions
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          version=$(python3 -c 'import xml.etree.ElementTree as ET; print(ET.parse("portable-ocr.csproj").findtext("./PropertyGroup/Version", ""))')
+          if [[ ! "$version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "Invalid project version: $version" >&2
+            exit 1
+          fi
+          tag="v$version"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          releases=$(gh api --paginate "repos/$GH_REPO/releases?per_page=100" --jq '.[].tag_name')
+          if grep -Fxq "$tag" <<< "$releases"; then
+            echo "Release $tag already exists; skipping packaging."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          else
+            if git show-ref --verify --quiet "refs/tags/$tag"; then
+              if [[ "$(git rev-list -n 1 "$tag")" != "$GITHUB_SHA" ]]; then
+                echo "Tag $tag already points to another commit. Choose a new project version." >&2
+                exit 1
+              fi
+            fi
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          fi
+
   build:
     name: ${{ matrix.runtime }}
+    needs: version
+    if: needs.version.outputs.build == 'true'
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
@@ -54,9 +97,8 @@ jobs:
           retention-days: 14
 
   release:
-    name: Upload release packages
-    if: github.event_name == 'release'
-    needs: build
+    name: Publish new version
+    needs: [version, build]
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -66,10 +108,12 @@ jobs:
           pattern: portable-ocr-*
           path: packages
           merge-multiple: true
-      - name: Upload all platform packages to the published release
+      - name: Publish all platform packages
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_TAG: ${{ needs.version.outputs.tag }}
         run: |
-          gh release upload "$RELEASE_TAG" packages/* --clobber
+          gh release create "$RELEASE_TAG" packages/* \
+            --target "$GITHUB_SHA" --title "portable-ocr $RELEASE_TAG" \
+            --generate-notes

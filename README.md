@@ -77,11 +77,11 @@ pwsh -File ./scripts/package.ps1 -Runtime win-x64
 
 ## GitHub Actions
 
-在 GitHub 的 [Releases](https://github.com/one-click-run/portable-ocr/releases) 页面创建新版本，选择当前代码的标签（例如 `v0.2.0`，新标签的目标选择 `main`），填写版本说明并点击 Publish release。正式版和预发布版都会触发五个平台的编译打包；仅保存草稿、推送代码或推送标签不会触发。
+版本号统一维护在 `portable-ocr.csproj` 的 `<Version>` 中，格式为 `主版本.次版本.修订号`，例如 `0.1.1`。更新该版本号并提交推送到 `main` 即可发布，无需手动创建标签、Release 或触发工作流。
 
-工作流构建 Release 标签对应的代码，全部平台打包成功后，自动将五个平台压缩包和 SHA-256 校验文件上传到该 Release 的 Assets。打包期间 Release 已经可见，下载附件需等工作流完成。失败后可以在 Actions 中重新运行，上传步骤会替换同名附件。工作流使用内置 `GITHUB_TOKEN`，无需额外配置发布 Secret；仓库或组织需允许 Actions，并允许该工作流写入 Release。
+每次推送到 `main`，工作流先检查对应的 `v<Version>` Release 是否已存在（包括草稿）。已存在时跳过编译和发布；不存在时才构建五个平台，全部成功后自动在该次提交上创建版本标签并公开发布 Release，附上五个平台压缩包、SHA-256 校验文件和自动生成的版本说明。若同名标签已经指向其他提交，工作流会报错，需使用新版本号。
 
-也可在 [Actions](https://github.com/one-click-run/portable-ocr/actions) 中手动运行 `Build portable-ocr` 验证构建，产物仅保存在该次运行的 Artifacts 中，不上传到 Release。解开 Actions 的外层 ZIP 后，再解压平台压缩包。
+构建失败时不会发布 Release，可修正代码后重新推送相同版本号，或在 [Actions](https://github.com/one-click-run/portable-ocr/actions) 中重新运行失败任务。工作流使用内置 `GITHUB_TOKEN`，无需额外配置发布 Secret；仓库或组织需允许 Actions，并允许该工作流创建 Release。已发布版本的附件保持原样，后续修改需更新版本号。
 
 macOS 包当前只带 Native AOT 的本地签名，没有 Developer ID 签名、公证或相关 Secret；完整的 Apple 分发签名需另行配置证书。
 
