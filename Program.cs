@@ -9,13 +9,13 @@ Console.OutputEncoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false
 
 if (args is ["-h" or "--help"])
 {
-    Console.WriteLine("Usage: android-ocr.exe <image.png>");
+    Console.WriteLine("Usage: portable-ocr <image.png>");
     return 0;
 }
 
 if (args is not [var imagePath] || imagePath.StartsWith('-'))
 {
-    Console.Error.WriteLine("Usage: android-ocr.exe <image.png>");
+    Console.Error.WriteLine("Usage: portable-ocr <image.png>");
     return 2;
 }
 
@@ -48,7 +48,7 @@ try
 }
 catch (Exception error)
 {
-    Console.Error.WriteLine($"android-ocr: {error.Message}");
+    Console.Error.WriteLine($"portable-ocr: {error.Message}");
     return 1;
 }
 
